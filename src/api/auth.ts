@@ -9,3 +9,11 @@ export const register = (username: string, email: string, password: string) => {
         password
     });
 };
+
+export const getAuthUser = () => {
+    return JSON.parse(localStorage.getItem('user')!);
+};
+
+export const logout = () => {
+    localStorage.removeItem('user');
+}
