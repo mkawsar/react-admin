@@ -4,26 +4,57 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import NavigationBar from './components/Navbar';
+// import NavigationBar from './components/Navbar';
 import UserManagement from './pages/UserManagement';
-import PrivateRoute from './components/PrivateRoute';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { AuthProvider, useAuth } from './providers/auth.providers';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 
 const App: React.FC = () => {
     return (
-        <Router>
-            <div className="App">
-                <NavigationBar />
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route path="/login" component={Login} />
-                    <Route path="/register" component={Register} />
-                    <PrivateRoute path="/dashboard" component={Dashboard} />
-                    <PrivateRoute path="/users" component={UserManagement} />
-                </Switch>
+        <AuthProvider>
+            <div className='app'>
+            {/* <NavigationBar /> */}
+                <Router>
+                    <Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route
+                            path="/"
+                            element={
+                                <RequireAuth>
+                                    <Home />
+                                </RequireAuth>
+                            }
+                        />
+
+                        <Route
+                            path="/dashboard"
+                            element={
+                                <RequireAuth>
+                                    <Dashboard />
+                                </RequireAuth>
+                            }
+                        />
+
+                        <Route
+                            path="/users"
+                            element={
+                                <RequireAuth>
+                                    <UserManagement />
+                                </RequireAuth>
+                            }
+                        />
+                    </Routes>
+
+                </Router>
             </div>
-        </Router>
+        </AuthProvider>
     );
+};
+
+const RequireAuth: React.FC<{ children: JSX.Element }> = ({ children }) => {
+    const { user } = useAuth();
+    return Object.keys(user).length !== 0 ? children : <Navigate to="/login" />;
 };
 
 export default App;

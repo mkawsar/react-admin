@@ -1,15 +1,15 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { logout, getAuthUser } from '../api/auth';
 
 const NavigationBar: React.FC = () => {
     const currentUser = getAuthUser();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
-        history.push('/login');
+        navigate('/login');
     };
 
     return (
