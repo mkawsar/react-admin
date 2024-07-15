@@ -1,5 +1,6 @@
 import React from 'react';
-import './App.css';
+import './assets/vendor/fontawesome-free/css/all.css';
+import './assets/css/sb-admin-2.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -16,8 +17,8 @@ const App: React.FC = () => {
             {/* <NavigationBar /> */}
                 <Router>
                     <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={ localStorage.getItem('user') ? <Navigate to="/" /> : <Login />} />
+                        <Route path="/register" element={ localStorage.getItem('user') ? <Navigate to="/" /> : <Register />} />
                         <Route
                             path="/"
                             element={
@@ -56,5 +57,6 @@ const RequireAuth: React.FC<{ children: JSX.Element }> = ({ children }) => {
     const { user } = useAuth();
     return Object.keys(user).length !== 0 ? children : <Navigate to="/login" />;
 };
+
 
 export default App;
